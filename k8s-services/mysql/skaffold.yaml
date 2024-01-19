@@ -1,0 +1,23 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: mysql_config
+deploy:
+  helm:
+    releases:
+      - name: "mysql"
+        remoteChart: mysql
+        valuesFiles:
+          - "k8s-services/mysql/values-mysql-{{.SITE}}.yaml"
+        namespace: "mysql-{{.SITE}}"
+        createNamespace: true
+        repo: https://charts.bitnami.com/bitnami
+        upgradeOnChange: true
+      - name: "adminer"
+        remoteChart: adminer
+        valuesFiles:
+          - "k8s-services/mysql/values-adminer-{{.SITE}}.yaml"
+        namespace: "mysql-{{.SITE}}"
+        createNamespace: true
+        repo: https://cetic.github.io/helm-charts
+        upgradeOnChange: true
