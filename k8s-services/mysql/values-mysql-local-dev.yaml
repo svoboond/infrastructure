@@ -2,6 +2,6 @@ auth:
    rootPassword: "rootpw"
 initdbScripts:
    energy-biller.sql: |
-      CREATE DATABASE IF NOT EXISTS energybillerdb;
-      CREATE USER energybilleru IDENTIFIED BY 'energybillerpw';
-      GRANT ALL PRIVILEGES ON energybillerdb.* to energybilleru;
+      CREATE DATABASE IF NOT EXISTS spinusdb;
+      CREATE USER spinusu IDENTIFIED BY 'spinuspw';
+      GRANT ALL PRIVILEGES ON spinusdb.* to spinusu;
