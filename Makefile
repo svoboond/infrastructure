@@ -1,7 +1,7 @@
 .PHONY: clean \
-	deploy-mysql-service \
+	deploy-postgres-service \
 	local-dev-deploy-all-services \
-	local-dev-deploy-mysql-service \
+	local-dev-deploy-postgres-service \
 	minikube-adminer minikube-create minikube-destroy minikube-init minikube-showall \
 	proxy-clean proxy-create proxy-destroy
 
@@ -16,18 +16,18 @@ OPEN_BROWSER ?= xdg-open
 
 clean: proxy-clean
 
-deploy-mysql-service:
-	SITE=${SITE} skaffold run --kube-context ${SITE} -f k8s-services/mysql/skaffold.yaml
+deploy-postgres-service:
+	SITE=${SITE} skaffold run --kube-context ${SITE} -f k8s-services/postgres/skaffold.yaml
 
 local-dev-deploy-all-services:
-	$(MAKE) --no-print-directory local-dev-deploy-mysql-service
+	$(MAKE) --no-print-directory local-dev-deploy-postgres-service
 
-local-dev-deploy-mysql-service:
-	@$(MAKE) --no-print-directory SITE=$(LOCAL_DEV_NAME) deploy-mysql-service
+local-dev-deploy-postgres-service:
+	@$(MAKE) --no-print-directory SITE=$(LOCAL_DEV_NAME) deploy-postgres-service
 
 minikube-adminer:
-	$(OPEN_BROWSER) `minikube service -n mysql-$(LOCAL_DEV_NAME) adminer --url=true`
-	@minikube service -n mysql-$(LOCAL_DEV_NAME) adminer --url=true
+	$(OPEN_BROWSER) `minikube service -n postgres-$(LOCAL_DEV_NAME) adminer --url=true`
+	@minikube service -n postgres-$(LOCAL_DEV_NAME) adminer --url=true
 
 minikube-create:
 	minikube start --profile=$(LOCAL_DEV_NAME) --cpus=$(LOCAL_DEV_CPUS) --memory=$(LOCAL_DEV_MEM) --driver=$(LOCAL_DEV_DRIVER) --kubernetes-version=$(LOCAL_DEV_VERSION) --addons=${LOCAL_DEV_ADDONS}

@@ -1,7 +1,0 @@
-auth:
-   rootPassword: "rootpw"
-initdbScripts:
-   energy-biller.sql: |
-      CREATE DATABASE IF NOT EXISTS spinusdb;
-      CREATE USER spinusu IDENTIFIED BY 'spinuspw';
-      GRANT ALL PRIVILEGES ON spinusdb.* to spinusu;

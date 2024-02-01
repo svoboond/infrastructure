@@ -1,0 +1,10 @@
+auth:
+  enablePostgresUser: true
+  postgresPassword: "postgrespw"
+primary:
+  initdb:
+    scripts:
+      spinus.sql: |
+        CREATE DATABASE spinusdb;
+        CREATE USER spinusu WITH PASSWORD 'spinuspw';
+        GRANT ALL PRIVILEGES ON DATABASE spinusdb TO spinusu;

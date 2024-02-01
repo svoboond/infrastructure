@@ -1,23 +1,23 @@
 apiVersion: skaffold/v3
 kind: Config
 metadata:
-  name: mysql_config
+  name: postgres_config
 deploy:
   helm:
     releases:
-      - name: "mysql"
-        remoteChart: mysql
+      - name: "postgres"
+        remoteChart: postgresql
         valuesFiles:
-          - "k8s-services/mysql/values-mysql-{{.SITE}}.yaml"
-        namespace: "mysql-{{.SITE}}"
+          - "k8s-services/postgres/values-postgres-{{.SITE}}.yaml"
+        namespace: "postgres-{{.SITE}}"
         createNamespace: true
         repo: https://charts.bitnami.com/bitnami
         upgradeOnChange: true
       - name: "adminer"
         remoteChart: adminer
         valuesFiles:
-          - "k8s-services/mysql/values-adminer-{{.SITE}}.yaml"
-        namespace: "mysql-{{.SITE}}"
+          - "k8s-services/postgres/values-adminer-{{.SITE}}.yaml"
+        namespace: "postgres-{{.SITE}}"
         createNamespace: true
         repo: https://cetic.github.io/helm-charts
         upgradeOnChange: true
