@@ -8,3 +8,4 @@ primary:
         CREATE DATABASE spinusdb;
         CREATE USER spinusu WITH PASSWORD 'spinuspw';
         GRANT ALL PRIVILEGES ON DATABASE spinusdb TO spinusu;
+        ALTER DATABASE spinusdb OWNER TO spinusu;
