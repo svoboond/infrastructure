@@ -8,7 +8,7 @@ else
     cluster_name="$1"
 fi
 
-if [[ -n $(docker ps -q --filter "name=docker_registry_proxy") ]]; then
+if [[ -n $(docker ps -q --filter "name=docker_local_registry_proxy") ]]; then
     echo "Proxy already exists."
     exit 0
 fi
@@ -18,9 +18,9 @@ if [[ -z $(docker network ls -q --filter "name=${cluster_name}") ]]; then
     exit -2
 else
     echo "Creating proxy ..."
-    docker run --detach --rm --name docker_registry_proxy -it \
-        --net "${cluster_name}" --hostname docker-registry-proxy \
-        -p 0.0.0.0:3128:3128 -e ENABLE_MANIFEST_CACHE=true \
+    docker run --detach --rm --name docker_local_registry_proxy -it \
+        --net "${cluster_name}" --hostname docker-local-registry-proxy \
+        -p 0.0.0.0:3129:3128 -e ENABLE_MANIFEST_CACHE=true \
         -v $(pwd)/docker_mirror_cache:/docker_mirror_cache \
         -v $(pwd)/docker_mirror_certs:/ca \
         -e REGISTRIES="k8s.gcr.io gcr.io docker.elastic.co" \
@@ -32,9 +32,9 @@ if [[ -z $(docker ps -q --filter "name=${cluster_name}") ]]; then
     exit -3
 else
     docker cp scripts/wait-for-it.sh "${cluster_name}:/root" >/dev/null
-    docker exec "${cluster_name}" bash -c "/root/wait-for-it.sh --timeout=10 docker-registry-proxy:3128" >/dev/null
+    docker exec "${cluster_name}" bash -c "/root/wait-for-it.sh --timeout=10 docker-local-registry-proxy:3128" >/dev/null
     docker exec "${cluster_name}" bash -c "\
-        curl http://docker-registry-proxy:3128/setup/systemd \
+        curl http://docker-local-registry-proxy:3128/setup/systemd \
         | sed '/Environment/ s/$/ \"NO_PROXY=localhost,127.0.0.1,10.96.0.0\/12,192.168.59.0\/24,192.168.49.0\/24,192.168.39.0\/24\"/' \
         | bash" >/dev/null
     runtime="60 second"
