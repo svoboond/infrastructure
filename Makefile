@@ -1,7 +1,7 @@
 .PHONY: clean \
-	deploy-postgres-service \
+	deploy-postgres-service deploy-redis-service \
 	local-dev-deploy-all-services \
-	local-dev-deploy-postgres-service \
+	local-dev-deploy-postgres-service local-dev-deploy-redis-service \
 	minikube-adminer minikube-create minikube-destroy minikube-init minikube-showall \
 	proxy-clean proxy-create proxy-destroy
 
@@ -19,11 +19,18 @@ clean: proxy-clean
 deploy-postgres-service:
 	SITE=${SITE} skaffold run --kube-context ${SITE} -f k8s-services/postgres/skaffold.yaml
 
+deploy-redis-service:
+	SITE=${SITE} skaffold run --kube-context ${SITE} -f k8s-services/redis/skaffold.yaml
+
 local-dev-deploy-all-services:
 	$(MAKE) --no-print-directory local-dev-deploy-postgres-service
+	$(MAKE) --no-print-directory local-dev-deploy-redis-service
 
 local-dev-deploy-postgres-service:
 	@$(MAKE) --no-print-directory SITE=$(LOCAL_DEV_NAME) deploy-postgres-service
+
+local-dev-deploy-redis-service:
+	@$(MAKE) --no-print-directory SITE=$(LOCAL_DEV_NAME) deploy-redis-service
 
 minikube-adminer:
 	$(OPEN_BROWSER) `minikube service -n postgres-$(LOCAL_DEV_NAME) adminer --url=true`

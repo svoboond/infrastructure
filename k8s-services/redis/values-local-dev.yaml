@@ -1,0 +1,9 @@
+architecture: standalone
+auth:
+  enabled: false
+master:
+  disableCommands: []
+  persistence:
+    size: 256Mi
+replica:
+  disableCommands: []

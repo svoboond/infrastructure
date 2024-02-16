@@ -1,0 +1,15 @@
+apiVersion: skaffold/v3
+kind: Config
+metadata:
+  name: redis_config
+deploy:
+  helm:
+    releases:
+      - name: "redis"
+        remoteChart: redis
+        valuesFiles:
+          - "k8s-services/redis/values-{{.SITE}}.yaml"
+        namespace: "redis-{{.SITE}}"
+        createNamespace: true
+        repo: https://charts.bitnami.com/bitnami
+        upgradeOnChange: true
